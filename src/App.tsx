@@ -1,43 +1,30 @@
-import React, { useState } from 'react';
-import Sidebar from './components/Sidebar';
-import Dashboard from './components/Dashboard';
-import StudentDashboard from './components/StudentDashboard';
-import CaretakerDashboard from './components/CaretakerDashboard';
-import TimelineView from './components/TimelineView';
-import RoleSwitcher from './components/RoleSwitcher';
-import { UserRole } from './types';
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import Auth from './components/Auth';
+import Layout from './components/Layout';
+import SupabaseTest from './components/SupabaseTest';
 
 function App() {
-  const [currentRole, setCurrentRole] = useState<UserRole>('teacher');
-  const [currentView, setCurrentView] = useState<'dashboard' | 'timeline'>('dashboard');
-
-  const getDashboardComponent = () => {
-    if (currentView === 'timeline') {
-      return <TimelineView />;
-    }
-
-    switch (currentRole) {
-      case 'student':
-        return <StudentDashboard />;
-      case 'caretaker':
-        return <CaretakerDashboard />;
-      default:
-        return <Dashboard />;
-    }
-  };
-
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar 
-        onViewChange={setCurrentView} 
-        currentView={currentView}
-        currentRole={currentRole}
-      />
-      <main className="flex-1 ml-64">
-        <RoleSwitcher currentRole={currentRole} onRoleChange={setCurrentRole} />
-        {getDashboardComponent()}
-      </main>
-    </div>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/auth" element={<Auth />} />
+          <Route
+            path="/*"
+            element={
+              <ProtectedRoute>
+                <Layout />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+        <SupabaseTest />
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
