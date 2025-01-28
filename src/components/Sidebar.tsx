@@ -37,7 +37,7 @@ export default function Sidebar({ currentView, onViewChange, currentRole = 'teac
       {/* Desktop Sidebar */}
       <aside className="bg-white h-screen w-64 fixed left-0 top-0 border-r border-gray-200 flex flex-col hidden md:flex">
         <div className="p-6">
-          <h1 className="text-2xl font-bold text-blue-600">LäroPlatform</h1>
+          <h1 className="text-2xl font-bold text-blue-600">DigiSchool</h1>
         </div>
         
         <div className="px-4">
